@@ -84,7 +84,8 @@ class Home extends State<AppNavigator> {
                         itemBuilder: (BuildContext context, int index) {
                           return renderImageCard(
                               'https://live.staticflickr.com/${images[index].server}/${images[index].id}_${images[index].secret}_z.jpg',
-                              images[index].title);
+                              images[index].title,
+                              context);
                         }),
                   )
             ],
