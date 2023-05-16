@@ -7,14 +7,13 @@ import '../components/image_card.dart';
 import '../components/loader.dart';
 import '../components/search_bar.dart';
 import '../main.dart';
-import '../services/cubit/sample.dart';
-import '../services/cubit/sample_cubit.dart';
+import '../services/cubit/images_cubit.dart';
+import '../services/cubit/images_state.dart';
 
 class Home extends State<AppNavigator> {
   final TextEditingController _controller = TextEditingController();
   String searchValue = '';
-  final SampleCubit _sampleCubit = SampleCubit();
-  List<PhotoModel> images = [];
+  final ImagesCubit _sampleCubit = ImagesCubit();
 
   @override
   void initState() {
@@ -28,19 +27,18 @@ class Home extends State<AppNavigator> {
     super.dispose();
   }
 
-  void onImageSearch() async {
-    List<PhotoModel> temp = await _sampleCubit.onSearch(_controller.text);
-    setState(() {
-      images = temp;
-    });
-  }
-
   void _onValueChange() {
+    if (_controller.text.isEmpty) {
+      _sampleCubit.setImagesList([]);
+    }
+
     if (_controller.text.isNotEmpty && _controller.text != searchValue) {
+      _sampleCubit.setLoader(true);
+
       EasyDebounce.debounce(
           'on-search-debouncer', // <-- An ID for this particular debouncer
           const Duration(milliseconds: 1000), // <-- The debounce duration
-          () => onImageSearch() // <-- The target method
+          () => _sampleCubit.onSearch(_controller.text) // <-- The target method
           );
     }
 
@@ -53,7 +51,7 @@ class Home extends State<AppNavigator> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _sampleCubit,
-      child: BlocConsumer<SampleCubit, Sample>(
+      child: BlocBuilder<ImagesCubit, ImagesState>(
         builder: (context, state) {
           return Scaffold(
             body: Padding(
@@ -61,7 +59,8 @@ class Home extends State<AppNavigator> {
               child: Column(
                 children: [
                   renderSearchBar(_controller),
-                  if (searchValue.isNotEmpty) renderList(context, images)
+                  if (searchValue.isNotEmpty)
+                    renderList(context, state.imagesList)
                 ],
               ),
             ),
@@ -70,14 +69,13 @@ class Home extends State<AppNavigator> {
             ),
           );
         },
-        listener: (context, state) {},
       ),
     );
   }
 }
 
 Widget renderList(BuildContext context, List<PhotoModel> images) {
-  return BlocBuilder<SampleCubit, Sample>(builder: (context, state) {
+  return BlocBuilder<ImagesCubit, ImagesState>(builder: (context, state) {
     if (state.loader) {
       return screenLoader();
     } else if (images.isNotEmpty) {
