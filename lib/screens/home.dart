@@ -35,11 +35,9 @@ class Home extends State<AppNavigator> {
       _imagesBloc.add(ScreenLoaderEvent(true));
 
       EasyDebounce.debounce(
-          'on-search-debouncer', // <-- An ID for this particular debouncer
-          const Duration(milliseconds: 1000), // <-- The debounce duration
-          () => _imagesBloc
-              .add(OnSearchEvent(_controller.text)) // <-- The target method
-          );
+          'on-search-debouncer',
+          const Duration(milliseconds: 1000),
+          () => _imagesBloc.add(OnSearchEvent(_controller.text)));
     }
 
     setState(() {

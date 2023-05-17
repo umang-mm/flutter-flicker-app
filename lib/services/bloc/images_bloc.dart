@@ -19,7 +19,7 @@ class ImagesBloc extends Bloc<ImagesEvent, ImagesState> {
 
     on<OnSearchEvent>((event, emit) async {
       Api api = Api();
-      Response response = await api.featchImageApi(event.searchValue, '1');
+      Response response = await api.featchImagesApi(event.searchValue, '1');
 
       if (response.statusCode == 200) {
         PhotosListModel photosModel = PhotosListModel.fromJson(response.data);

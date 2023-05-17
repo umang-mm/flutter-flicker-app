@@ -3,7 +3,7 @@ import '../http.dart';
 class Api {
   dynamic errorMessage;
 
-  dynamic featchImageApi(searchValue, page) async {
+  dynamic featchImagesApi(searchValue, page) async {
     try {
       final response = await dio.get('', queryParameters: {
         'api_key': '683197535373a2bc23abcd236aad2d22',
