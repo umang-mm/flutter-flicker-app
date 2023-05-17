@@ -1,14 +1,14 @@
+import 'package:flicker_app/services/bloc/images_bloc.dart';
+import 'package:flicker_app/services/bloc/images_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../services/cubit/images_cubit.dart';
-import '../services/cubit/images_state.dart';
 import '../services/models/photo_model.dart';
 import 'image_card.dart';
 import 'loader.dart';
 
 Widget renderImageList(BuildContext context, List<PhotoModel> images) {
-  return BlocBuilder<ImagesCubit, ImagesState>(builder: (context, state) {
+  return BlocBuilder<ImagesBloc, ImagesState>(builder: (context, state) {
     if (state.loader) {
       return screenLoader();
     } else if (images.isNotEmpty) {

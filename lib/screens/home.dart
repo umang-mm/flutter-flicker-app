@@ -1,17 +1,18 @@
 import 'package:easy_debounce/easy_debounce.dart';
+import 'package:flicker_app/services/bloc/images_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../components/image_list.dart';
 import '../components/search_bar.dart';
 import '../main.dart';
-import '../services/cubit/images_cubit.dart';
-import '../services/cubit/images_state.dart';
+import '../services/bloc/images_bloc.dart';
+import '../services/bloc/images_event.dart';
 
 class Home extends State<AppNavigator> {
   final TextEditingController _controller = TextEditingController();
   String searchValue = '';
-  final ImagesCubit _imagesCubit = ImagesCubit();
+  final ImagesBloc _imagesBloc = ImagesBloc();
 
   @override
   void initState() {
@@ -27,16 +28,17 @@ class Home extends State<AppNavigator> {
 
   void _onValueChange() {
     if (_controller.text.isEmpty) {
-      _imagesCubit.clearList();
+      _imagesBloc.add(ClearListEvent());
     }
 
     if (_controller.text.isNotEmpty && _controller.text != searchValue) {
-      _imagesCubit.setLoader(true);
+      _imagesBloc.add(ScreenLoaderEvent(true));
 
       EasyDebounce.debounce(
           'on-search-debouncer', // <-- An ID for this particular debouncer
           const Duration(milliseconds: 1000), // <-- The debounce duration
-          () => _imagesCubit.onSearch(_controller.text) // <-- The target method
+          () => _imagesBloc
+              .add(OnSearchEvent(_controller.text)) // <-- The target method
           );
     }
 
@@ -48,8 +50,8 @@ class Home extends State<AppNavigator> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _imagesCubit,
-      child: BlocBuilder<ImagesCubit, ImagesState>(
+      create: (context) => _imagesBloc,
+      child: BlocBuilder<ImagesBloc, ImagesState>(
         builder: (context, state) {
           return Scaffold(
             body: Padding(
