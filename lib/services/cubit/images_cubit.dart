@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 
 import '../apis/api.dart';
-import '../models/photo_model.dart';
 import '../models/photos_list.dart';
 import 'images_state.dart';
 
@@ -13,7 +12,7 @@ class ImagesCubit extends Cubit<ImagesState> {
     emit(ImagesStateResultState(true, []));
   }
 
-  void setImagesList(List<PhotoModel> imagesList) {
+  void clearList() {
     emit(ImagesStateResultState(false, []));
   }
 
