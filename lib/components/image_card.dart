@@ -1,5 +1,5 @@
-import 'package:flicker_app/screens/image_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 Widget renderImageCard(
     String imageUrl, String imageTitle, BuildContext context) {
@@ -7,14 +7,8 @@ Widget renderImageCard(
       padding: const EdgeInsets.only(bottom: 12),
       child: GestureDetector(
         onTap: () => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ImageDetail(
-                      imageTitle: imageTitle,
-                      imageUrl: imageUrl,
-                    )),
-          )
+          GoRouter.of(context)
+              .go('/imageDetail?imageUrl=$imageUrl&imageTitle=$imageTitle')
         },
         child: Container(
             decoration: BoxDecoration(

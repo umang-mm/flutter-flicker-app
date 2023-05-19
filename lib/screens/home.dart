@@ -5,11 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../components/image_list.dart';
 import '../components/search_bar.dart';
-import '../main.dart';
 import '../services/bloc/images_bloc.dart';
 import '../services/bloc/images_event.dart';
 
-class Home extends State<AppNavigator> {
+class Home extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   String searchValue = '';
   final ImagesBloc _imagesBloc = ImagesBloc();
@@ -70,4 +69,11 @@ class Home extends State<AppNavigator> {
       ),
     );
   }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => Home();
 }
